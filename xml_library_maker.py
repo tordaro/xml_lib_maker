@@ -5,6 +5,7 @@ import xml.etree.ElementTree as et
 from scipy.constants import pi, g
 import matplotlib.pyplot as plt
 plt.style.use('bmh')
+plt.switch_backend('agg')
 
 def test_col_names(material_df):
     '''Checks that the header is as expected.'''
@@ -177,6 +178,7 @@ def main():
     "Sdan-8": ["Superdan 8-slått", "8-Superdan", False],
     "Nyl-3": ["Nylon 3-slått", "3-Nylon", False],
     "Nyl-8": ["Nylon 8-slått", "8-Nylon", False],
+    "Tuf-3": ["Tufflex 3-slått", "3-Tufflex", False],
     "GS-3": ["Gold Safety 3-slått", "3-GoldSafety", False],
     "AlKj": ["Alloykjetting", "Alloykjetting", True],
     "AnKj": ["Ankerkjetting", "Ankerkjetting", True]
