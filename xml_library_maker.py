@@ -30,7 +30,7 @@ def test_col_types(material_df):
 
 
 def test_increasing_observations(material_df):
-    '''Checks that all, except last two columns, are 
+    '''Checks that all, except last two columns, are
     increasing in value with each observation.'''
     rows, cols = material_df.shape
     for j in range(cols-2):
