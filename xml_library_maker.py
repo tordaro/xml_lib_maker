@@ -64,34 +64,34 @@ def test_material(material_df):
 
 def make_control_figures(material_df, fig_name, folder=None):
     '''Makes figures that are important for inspection.'''
-    material_df_mod = material_df.set_index("Diameter [mm]")
-    min_D = np.floor(material_df["Diameter [mm]"].min() / 10) * 10
-    max_D = np.ceil(material_df["Diameter [mm]"].max() / 10 + 1) * 10
+    material_df_mod = material_df.set_index('Diameter [mm]')
+    min_D = np.floor(material_df['Diameter [mm]'].min() / 10) * 10
+    max_D = np.ceil(material_df['Diameter [mm]'].max() / 10 + 1) * 10
     fig1 = material_df_mod.plot(subplots=True,
                                 figsize=(10, 20),
                                 xticks=np.arange(min_D, max_D, 10),
-                                marker="o",
+                                marker='o',
                                 title=fig_name,
                                 fontsize=20)
     if folder:
-        plt.savefig(folder + "/" + fig_name + ".svg", format="svg")
-        plt.savefig(folder + "/" + fig_name + ".png", format="png")
+        plt.savefig(folder + '/' + fig_name + '.svg', format='svg')
+        plt.savefig(folder + '/' + fig_name + '.png', format='png')
     else:
-        plt.savefig(fig_name + ".svg", format="svg")
-        plt.savefig(fig_name + ".png", format="png")
+        plt.savefig(fig_name + '.svg', format='svg')
+        plt.savefig(fig_name + '.png', format='png')
     plt.clf()
     fig2 = material_df_mod.diff().plot(subplots=True,
                                        figsize=(10, 20),
                                        xticks=np.arange(min_D, max_D, 10),
-                                       marker="o",
+                                       marker='o',
                                        title=fig_name,
                                        fontsize=20)
     if folder:
-        plt.savefig(folder + "/" + fig_name + "_diff.svg", format="svg")
-        plt.savefig(folder + "/" + fig_name + "_diff.png", format="png")
+        plt.savefig(folder + '/' + fig_name + '_diff.svg', format='svg')
+        plt.savefig(folder + '/' + fig_name + '_diff.png', format='png')
     else:
-        plt.savefig(fig_name + "_diff.svg", format="svg")
-        plt.savefig(fig_name + "_diff.png", format="png")
+        plt.savefig(fig_name + '_diff.svg', format='svg')
+        plt.savefig(fig_name + '_diff.png', format='png')
     plt.clf()
 
 
@@ -102,18 +102,18 @@ def make_xml_library(
     is_chain,
     folder=None
 ):
-    """Reads from material DataFrame and
-    writes readable library of steel chain for AquaEdit."""
+    '''Reads from material DataFrame and
+    writes readable library of steel chain for AquaEdit.'''
     sea_density = 1025.0
     steel_density = 7850.0  # value used by AS
     # correction for buoyancy of steel in sea water
     mass_correction = ((steel_density - sea_density) / steel_density)
 
     for index, row in material_df.iterrows():
-        full_name = str(int(row["Diameter [mm]"])) + " " + material_suffix
-        description = str(int(row["Diameter [mm]"])) + " mm " + material_name
-        radius = row["Diameter [mm]"] / 2e3  # meters
-        mass = row["Massetetthet [kg/m]"]  # per meter
+        full_name = str(int(row['Diameter [mm]'])) + ' ' + material_suffix
+        description = str(int(row['Diameter [mm]'])) + ' mm ' + material_name
+        radius = row['Diameter [mm]'] / 2e3  # meters
+        mass = row['Massetetthet [kg/m]']  # per meter
         if is_chain:
             addedmassz = 1.0
             addedmassy = 1.0
@@ -129,53 +129,53 @@ def make_xml_library(
             mass_water = 0.001
             volume = area
 
-        library = et.Element("Library")
-        truss = et.SubElement(library, "truss",
+        library = et.Element('Library')
+        truss = et.SubElement(library, 'truss',
                               id=str(index + 1),
                               name=full_name)
-        et.SubElement(truss, "description", des=description)
-        et.SubElement(truss, "mooring",
-                      pretension="0.0",
+        et.SubElement(truss, 'description', des=description)
+        et.SubElement(truss, 'mooring',
+                      pretension='0.0',
                       addedmasscoefflocalz=str(addedmassz),
                       addedmasscoefflocaly=str(addedmassy),
                       massdensity=str(rho),
-                      young=str(row["E-modul [Pa]"]),
-                      noCompressionForces="false",
-                      volumeoverwritten="true",
+                      young=str(row['E-modul [Pa]']),
+                      noCompressionForces='false',
+                      volumeoverwritten='true',
                       volume=str(volume),
                       areal=str(area),
-                      weightinwateroverwritten="true",
+                      weightinwateroverwritten='true',
                       weightInWater=str(mass_water),
                       weightInAir=str(mass))
-        et.SubElement(truss, "extra",
-                      trusstype="3",  # custom type
-                      materialcoefficient=str(row["Materialkoeffisient"]),
-                      breakingload=str(row["MBL [kN]"] * 1000))
-        et.SubElement(truss, "loadmodel",
-                      dragCoeffy="1.2",
-                      dragCoeffz="1.2",
-                      dragArealy=str(row["Diameter [mm]"] / 1000),
-                      dragArealyz=str(row["Diameter [mm]"] / 1000),
-                      constructionDamping="0.0",
-                      rayleighStiffness="0.0",
-                      tangentialDragCoeff="0.0",
-                      numvelocities="0",
-                      hullnumPoints="0",
-                      closeSurfaceNumPoints="0",
-                      numWaveHeading="0",
-                      viscousRollDamping="0.0",
-                      massRadius="0.0",
-                      LoadType="MORRISON")
+        et.SubElement(truss, 'extra',
+                      trusstype='3',  # custom type
+                      materialcoefficient=str(row['Materialkoeffisient']),
+                      breakingload=str(row['MBL [kN]'] * 1000))
+        et.SubElement(truss, 'loadmodel',
+                      dragCoeffy='1.2',
+                      dragCoeffz='1.2',
+                      dragArealy=str(row['Diameter [mm]'] / 1000),
+                      dragArealyz=str(row['Diameter [mm]'] / 1000),
+                      constructionDamping='0.0',
+                      rayleighStiffness='0.0',
+                      tangentialDragCoeff='0.0',
+                      numvelocities='0',
+                      hullnumPoints='0',
+                      closeSurfaceNumPoints='0',
+                      numWaveHeading='0',
+                      viscousRollDamping='0.0',
+                      massRadius='0.0',
+                      LoadType='MORRISON')
 
         tree = et.ElementTree(library)
         if folder:
             if folder in listdir():
-                tree.write(folder + "/" + full_name + ".xml")
+                tree.write(folder + '/' + full_name + '.xml')
             else:
                 mkdir(folder)
-                tree.write(folder + "/" + full_name + ".xml")
+                tree.write(folder + '/' + full_name + '.xml')
         else:
-            tree.write(full_name + ".xml")
+            tree.write(full_name + '.xml')
 
 
 def make_library(
@@ -189,7 +189,7 @@ def make_library(
     '''Runs test battery, creates figures
     for inspection and AE friendly library.'''
     material_df = pd.read_excel(lib_path, sheet_name=sheet_name, dtype=float)
-    make_control_figures(material_df, fig_name=sheet_name, folder="Figurer")
+    make_control_figures(material_df, fig_name=sheet_name, folder='Figurer')
     test_material(material_df)
     make_xml_library(
         material_df,
@@ -205,16 +205,16 @@ def main():
     filepath = sys.argv[1]
     mat_dict = {
       # Suffix: [material_name, sheet_name, is_chain]
-      "STec-3": ["SuperTec 3-slått", "3-SuperTec", False],
-      "STec-8": ["SuperTec 8-slått", "8-SuperTec", False],
-      "Sdan-3": ["Superdan 3-slått", "3-Superdan", False],
-      "Sdan-8": ["Superdan 8-slått", "8-Superdan", False],
-      "Nyl-3": ["Nylon 3-slått", "3-Nylon", False],
-      "Nyl-8": ["Nylon 8-slått", "8-Nylon", False],
-      "Tuf-3": ["Tufflex 3-slått", "3-Tufflex", False],
-      "GS-3": ["Gold Safety 3-slått", "3-GoldSafety", False],
-      "AlKj": ["Alloykjetting", "Alloykjetting", True],
-      "AnKj": ["Ankerkjetting", "Ankerkjetting", True]
+      'STec-3': ['SuperTec 3-slått', '3-SuperTec', False],
+      'STec-8': ['SuperTec 8-slått', '8-SuperTec', False],
+      'Sdan-3': ['Superdan 3-slått', '3-Superdan', False],
+      'Sdan-8': ['Superdan 8-slått', '8-Superdan', False],
+      'Nyl-3': ['Nylon 3-slått', '3-Nylon', False],
+      'Nyl-8': ['Nylon 8-slått', '8-Nylon', False],
+      'Tuf-3': ['Tufflex 3-slått', '3-Tufflex', False],
+      'GS-3': ['Gold Safety 3-slått', '3-GoldSafety', False],
+      'AlKj': ['Alloykjetting', 'Alloykjetting', True],
+      'AnKj': ['Ankerkjetting', 'Ankerkjetting', True]
       }
 
     for suffix, mat_list in mat_dict.items():
